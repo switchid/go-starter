@@ -1,0 +1,25 @@
+app:
+  name: MyApp
+  version: 1.0.0
+  debug: true  # New optional setting
+server:
+  host: localhost
+  port: 80
+database:
+  driver: mysql
+  host: localhost
+  port: 3306
+  name: dbschmgmt
+  prefix: schmgmt_
+  credentials:
+    username: root
+    password:
+  pool:  # New optional section
+    max_connections: 100
+    idle_timeout: 30
+features:
+  feature1: true
+  feature2: false
+logging:  # New optional section
+  level: info
+  file: /log/myapp.log
