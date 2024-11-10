@@ -1,7 +1,7 @@
 app:
   name: MyApp
   version: 1.0.0
-  debug: true  # New optional setting
+  debug: true  # New optional settings
 server:
   host: localhost
   port: 80

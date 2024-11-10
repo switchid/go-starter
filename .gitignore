@@ -24,6 +24,8 @@ go.work
 /.idea
 build/*
 scripts/migration/*
+tmp/*
 
 # Unignore specific files or directory
-!scripts/migration/20240728230846_create_tb_users.go
+!scripts/migration/20240728230846_create_tba_users.go
+!scripts/migration/20241031230204_create_tba_user_verification_table.go

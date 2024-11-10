@@ -1,0 +1,23 @@
+{% extends "layouts/auth.django" %}
+{% macro select(id,name,text,placeholder,option,required) export %}
+<label for="{{ id }}" class="block text-gray-700 text-sm font-bold mb-2">{{ text }}</label>
+<select id="{{ id }}"
+        class="block appearance-none w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring focus:border-blue-300"
+        name="{{ name }}"
+        style="background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIxMDAiIGhlaWdodD0iMTAwIj4KICA8cGF0aCBkPSJNMTAsMEwgNTAsNTAgTDEwMCw4MCBMIDAsOTAgTDEwMCw0MCBMIDAsMEwiIHN0cm9rZS13aWR0aD0iMiIvPjwvc3ZnPg==') no-repeat right 0.75rem center;
+      background-size: 1rem;
+      padding-right: 2.5rem;"
+        {% if required %}
+        required
+        {% endif %}>
+    <option disabled selected>{{placeholder}}</option>
+    {% for opt in option %}
+        <option value="{{opt.value}}">{{opt.text}}</option>
+    {% endfor %}
+</select>
+{% endmacro %}
+{% block script %}
+<script type="text/javascript">
+    alert("test");
+</script>
+{% endblock %}

@@ -1,17 +1,22 @@
 package main
 
 import (
-	"GoStarter/pkg/config"
+	"GoStarter/internal/middleware"
+	"GoStarter/internal/pkg/config"
+	"GoStarter/internal/routes"
 	"GoStarter/pkg/utils/loggers"
 	"GoStarter/web"
 	"flag"
 	"fmt"
+	"github.com/flosch/pongo2/v6"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/django/v3"
 	"golang.org/x/sys/windows/svc"
 	"net/http"
 	"os"
 	"os/signal"
+	"path/filepath"
+	"strings"
 	"syscall"
 	"time"
 )
@@ -55,25 +60,66 @@ loop:
 	return
 }
 
+func loadMacros(engine *django.Engine, macrosDir string) error {
+	return filepath.Walk(macrosDir, func(path string, info os.FileInfo, err error) error {
+		if err != nil {
+			return err
+		}
+		if !info.IsDir() && strings.HasSuffix(path, ".django") {
+			macroName := strings.TrimSuffix(filepath.Base(path), ".django")
+			macroContent, err := os.ReadFile(path)
+			if err != nil {
+				return err
+			}
+			// Create a template from the macro content
+			var tmpl = pongo2.Must(pongo2.FromString(string(macroContent)))
+			//println(tmpl)
+			// Create a function that executes the template
+			engine.AddFunc(macroName, func(str string) (string, error) {
+				return tmpl.Execute(pongo2.Context{"text": str})
+			})
+
+		}
+		return nil
+	})
+}
+
 func (s *fiberService) runFiberApp() {
 	cfg, err := config.Load()
 	if err != nil {
 		s.logger.LogError("Error loading config: %v", err)
 		os.Exit(1)
 	}
+
 	engine := django.NewPathForwardingFileSystem(http.FS(web.TemplatesFS), "/templates", ".django")
+	//currentDir, err := os.Getwd()
+	//if err != nil {
+	//	fmt.Println("Error:", err)
+	//	return
+	//}
+	//templateDir := filepath.Join(currentDir, "web/templates/components")
+	//errMacros := loadMacros(engine, templateDir)
+	//if errMacros != nil {
+	//	return
+	//}
+
 	s.app = fiber.New(fiber.Config{
 		Views: engine,
 	})
 
-	s.app.Get("/", func(c *fiber.Ctx) error {
-		return c.Render("layouts/main", fiber.Map{
-			"Title": "Hello World",
-		}, "index")
+	s.app.Use(middleware.AppMiddleware)
+
+	r := routes.Load(s.app)
+	r.AppRoutes()
+	r.AuthRoutes()
+	r.NotFoundRoutes()
+
+	s.app.Use(func(ctx *fiber.Ctx) error {
+		return ctx.RedirectToRoute("not-found", fiber.Map{"name": "", "queries": map[string]string{"urls": strings.TrimLeft(ctx.OriginalURL(), "/")}})
 	})
 
-	s.logger.LogInfo("Starting Fiber app on port " + cfg.GetServerPort())
-	sPort := ":" + cfg.GetServerPort()
+	s.logger.LogInfo("Starting Fiber app on port " + cfg.GetServerAppPort())
+	sPort := ":" + cfg.GetServerAppPort()
 	if err = s.app.Listen(sPort); err != nil {
 		s.logger.LogError("Error starting Fiber app: %v", err)
 	}

@@ -2,13 +2,13 @@ package migration
 
 import (
 	internalMigration "GoStarter/internal/cli/commands/migration"
-	"GoStarter/internal/models"
+	models "GoStarter/internal/models/authentication"
 	"fmt"
 	"gorm.io/gorm"
 )
 
 func init() {
-	var User models.User
+	var User models.TbaUser
 	internalMigration.MigrationsDB = append(internalMigration.MigrationsDB, internalMigration.Migrations{
 		MigrationName: "20240728230846_create_tb_users",
 		Up: func(db *gorm.DB) error {

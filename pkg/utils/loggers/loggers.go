@@ -1,7 +1,7 @@
 package loggers
 
 import (
-	"GoStarter/pkg/utils/helpers"
+	"GoStarter/pkg/utils/paths"
 	"fmt"
 	"log"
 	"os"
@@ -19,7 +19,7 @@ type LoggerPrint interface {
 }
 
 func NewLogger() (*Logger, error) {
-	exePath, errPath := helpers.GetCurrentExecutableDir()
+	exePath, errPath := paths.GetCurrentExecutableDir()
 	if errPath != nil {
 		log.Fatalf("Error getting executable path: %v", errPath)
 	}

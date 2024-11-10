@@ -1,0 +1,19 @@
+{% macro button_link(text,link,style,class) export %}
+<a href="{{ link | default:'#' }}"
+   class="
+       {% if class == '' %}
+           {% if style == 'success' %}
+                bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded transition duration-300
+           {% elif style == 'warning' %}
+                bg-orange-500 hover:bg-orange-600 text-white font-bold py-2 px-4 rounded transition duration-300
+           {% elif style == 'danger' %}
+                bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded transition duration-300
+           {% else %}
+                bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded transition duration-300
+           {% endif %}
+        {% else %}
+            {{ class }}
+        {% endif %}">
+    {{ text }}
+</a>
+{% endmacro %}

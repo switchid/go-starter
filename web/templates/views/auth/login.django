@@ -1,1 +1,30 @@
-<h1>{{ Title }}</h1>
+{% import "components/buttons/button.django" button %}
+{% import "components/forms/input.django" input %}
+{% import "components/forms/checkbox.django" checkbox %}
+{% import "components/forms/textarea.django" textarea %}
+{% import "components/forms/select.django" select %}
+
+<div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+        <h2 class="text-2xl font-bold mb-6 text-center">Login</h2>
+        <form action="/auth/login" method="POST">
+            <div class="mb-4">
+                {{input("email","email","email","Email",true)}}
+            </div>
+            <div class="mb-6">
+                {{input("password","password","password","Password",true)}}
+            </div>
+            <div class="mb-6">
+                {{textarea("address","address","Address",false)}}
+            </div>
+            <div class="mb-6">
+                {{select("sex","sex","Sex","choose sex",option,false)}}
+            </div>
+            <div class="flex items-center justify-between mb-6">
+                <div>
+                {{checkbox("remember","remember","Remember me",false)}}
+                </div>
+                <a href="#" class="text-sm text-blue-500 hover:underline">Forgot password?</a>
+            </div>
+            {{button("Sign In","submit","","w-full bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300")}}
+        </form>
+    </div>

@@ -1,9 +1,9 @@
 package database
 
 import (
-	"GoStarter/pkg/config"
-	"GoStarter/pkg/utils/helpers"
+	"GoStarter/internal/pkg/config"
 	"GoStarter/pkg/utils/loggers"
+	"GoStarter/pkg/utils/stringers"
 	"fmt"
 	"gorm.io/driver/mysql"
 	"gorm.io/driver/postgres"
@@ -14,13 +14,13 @@ import (
 func Connect() (*gorm.DB, error) {
 	logger, err := loggers.NewLogger()
 	if err != nil {
-		fmt.Printf(helpers.Strings.SetTextRed("Failed to set up loggers: %v"), err)
+		fmt.Printf(stringers.NewString("Failed to set up loggers: %v").SetTextColor(stringers.RED), err)
 		return nil, err
 	}
 
 	cfg, err := config.Load()
 	if err != nil {
-		fmt.Printf(helpers.Strings.SetTextRed("Failed to load configuration: %v"), err)
+		fmt.Printf(stringers.NewString("Failed to load configuration: %v").SetTextColor(stringers.RED), err)
 		logger.LogError("Failed to load configuration: %v", err)
 		return nil, err
 	}
@@ -29,7 +29,7 @@ func Connect() (*gorm.DB, error) {
 	if cfg.GetDBDriver() == "mysql" {
 		db, err = gorm.Open(mysql.Open(cfg.GetDBUser()+":"+cfg.GetDBPassword()+"@tcp("+cfg.GetDBHost()+":"+cfg.GetDBPort()+")/"+cfg.GetDBName()+"?parseTime=true"), &gorm.Config{})
 		if err != nil {
-			fmt.Printf(helpers.Strings.SetTextRed("Failed to connect to database mysql: %v"), err)
+			fmt.Printf(stringers.NewString("Failed to connect to database mysql: %v").SetTextColor(stringers.RED), err)
 			logger.LogError("Failed to connect to database mysql:", err)
 			return nil, err
 		}
@@ -40,7 +40,7 @@ func Connect() (*gorm.DB, error) {
 			},
 		})
 		if err != nil {
-			fmt.Printf(helpers.Strings.SetTextRed("Failed to connect to database postgres: %v"), err)
+			fmt.Printf(stringers.NewString("Failed to connect to database postgres: %v").SetTextColor(stringers.RED), err)
 			logger.LogError("Failed to connect to database postgres:", err)
 			return nil, err
 		}

@@ -1,10 +1,170 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>{{ Title }}</title>
-</head>
-<body>
+<!-- Navigation -->
+<nav class="bg-white shadow-lg">
+    <div class="max-w-6xl mx-auto px-4">
+        <div class="flex justify-between">
+            <div class="flex space-x-7">
+                <div>
+                    <a href="#" class="flex items-center py-4 px-2">
+                        <span class="font-semibold text-gray-500 text-lg">Your Logo</span>
+                    </a>
+                </div>
+            </div>
+            <div class="hidden md:flex items-center space-x-1">
+                <a href="#" class="py-4 px-2 text-gray-500 hover:text-gray-900">Home</a>
+                <a href="#" class="py-4 px-2 text-gray-500 hover:text-gray-900">Features</a>
+                <a href="#" class="py-4 px-2 text-gray-500 hover:text-gray-900">Pricing</a>
+                <a href="#" class="py-4 px-2 text-gray-500 hover:text-gray-900">Contact</a>
+            </div>
+        </div>
+    </div>
+</nav>
 
-</body>
-</html>
+<!-- Hero Section -->
+<div class="py-20" style="background: linear-gradient(90deg, #667eea 0%, #764ba2 100%)">
+    <div class="container mx-auto px-6">
+        <h2 class="text-4xl font-bold mb-2 text-white">
+            Welcome to Your Product
+        </h2>
+        <h3 class="text-2xl mb-8 text-gray-200">
+            Discover amazing features that will revolutionize your work
+        </h3>
+        <button class="bg-white font-bold rounded-full py-4 px-8 shadow-lg uppercase tracking-wider">
+            Get Started
+        </button>
+    </div>
+</div>
+
+<!-- Features Section -->
+<div class="container mx-auto px-6 py-20">
+    <h2 class="text-4xl font-bold text-center text-gray-800 mb-8">
+        Features
+    </h2>
+    <div class="flex flex-wrap">
+        <div class="w-full md:w-1/3 px-4 mb-8">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <div class="text-3xl font-bold text-gray-800 mb-4">Feature 1</div>
+                <p class="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nec condimentum
+                    quam.</p>
+            </div>
+        </div>
+        <div class="w-full md:w-1/3 px-4 mb-8">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <div class="text-3xl font-bold text-gray-800 mb-4">Feature 2</div>
+                <p class="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nec condimentum
+                    quam.</p>
+            </div>
+        </div>
+        <div class="w-full md:w-1/3 px-4 mb-8">
+            <div class="bg-white rounded-lg shadow-lg p-8">
+                <div class="text-3xl font-bold text-gray-800 mb-4">Feature 3</div>
+                <p class="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis nec condimentum
+                    quam.</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Testimonials Section -->
+<div class="bg-gray-100">
+    <div class="container mx-auto px-6 py-20">
+        <h2 class="text-4xl font-bold text-center text-gray-800 mb-8">
+            Testimonials
+        </h2>
+        <div class="flex flex-wrap">
+            <div class="w-full md:w-1/3 px-4 mb-8">
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <p class="text-gray-600 mb-4">"This product has completely transformed our workflow. Highly
+                        recommended!"</p>
+                    <p class="font-bold text-gray-800">- John Doe, CEO</p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 px-4 mb-8">
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <p class="text-gray-600 mb-4">"I can't imagine working without this tool now. It's simply
+                        amazing!"</p>
+                    <p class="font-bold text-gray-800">- Jane Smith, Designer</p>
+                </div>
+            </div>
+            <div class="w-full md:w-1/3 px-4 mb-8">
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <p class="text-gray-600 mb-4">"The customer support is top-notch. They're always there when you need
+                        them."</p>
+                    <p class="font-bold text-gray-800">- Mike Johnson, Developer</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Call to Action -->
+<div class="bg-gray-800">
+    <div class="container mx-auto px-6 py-20">
+        <h2 class="text-4xl font-bold text-center text-white mb-8">
+            Ready to get started?
+        </h2>
+        <button class="bg-white font-bold rounded-full mt-6 py-4 px-8 shadow-lg uppercase tracking-wider">
+            Sign Up Now
+        </button>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-gray-100">
+    <div class="container mx-auto px-6 pt-10 pb-6">
+        <div class="flex flex-wrap">
+            <div class="w-full md:w-1/4 text-center md:text-left">
+                <h5 class="uppercase mb-6 font-bold">Links</h5>
+                <ul class="mb-4">
+                    <li class="mt-2">
+                        <a href="#" class="hover:underline text-gray-600 hover:text-orange-500">FAQ</a>
+                    </li>
+                    <li class="mt-2">
+                        <a href="#" class="hover:underline text-gray-600 hover:text-orange-500">Help</a>
+                    </li>
+                    <li class="mt-2">
+                        <a href="#" class="hover:underline text-gray-600 hover:text-orange-500">Support</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="w-full md:w-1/4 text-center md:text-left">
+                <h5 class="uppercase mb-6 font-bold">Legal</h5>
+                <ul class="mb-4">
+                    <li class="mt-2">
+                        <a href="#" class="hover:underline text-gray-600 hover:text-orange-500">Terms</a>
+                    </li>
+                    <li class="mt-2">
+                        <a href="#" class="hover:underline text-gray-600 hover:text-orange-500">Privacy</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="w-full md:w-1/4 text-center md:text-left">
+                <h5 class="uppercase mb-6 font-bold">Social</h5>
+                <ul class="mb-4">
+                    <li class="mt-2">
+                        <a href="#" class="hover:underline text-gray-600 hover:text-orange-500">Facebook</a>
+                    </li>
+                    <li class="mt-2">
+                        <a href="#" class="hover:underline text-gray-600 hover:text-orange-500">Twitter</a>
+                    </li>
+                    <li class="mt-2">
+                        <a href="#" class="hover:underline text-gray-600 hover:text-orange-500">Instagram</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="w-full md:w-1/4 text-center md:text-left">
+                <h5 class="uppercase mb-6 font-bold">Company</h5>
+                <ul class="mb-4">
+                    <li class="mt-2">
+                        <a href="#" class="hover:underline text-gray-600 hover:text-orange-500">About Us</a>
+                    </li>
+                    <li class="mt-2">
+                        <a href="#" class="hover:underline text-gray-600 hover:text-orange-500">Contact</a>
+                    </li>
+                    <li class="mt-2">
+                        <a href="#" class="hover:underline text-gray-600 hover:text-orange-500">Careers</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</footer>

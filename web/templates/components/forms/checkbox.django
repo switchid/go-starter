@@ -1,0 +1,7 @@
+{% macro checkbox(id,name,text,required) export %}
+<input type="checkbox" id="{{ id }}" name="{{ name }}" class="mr-2"
+       {% if required %}
+       required
+       {% endif %}>
+<label for="{{ id }}" class="text-sm text-gray-600">{{ text }}</label>
+{% endmacro %}
