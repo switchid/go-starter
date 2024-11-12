@@ -5,7 +5,7 @@ import (
 )
 
 type Routes struct {
-	App *fiber.App
+	app *fiber.App
 }
 
 func Load(app *fiber.App) *Routes {

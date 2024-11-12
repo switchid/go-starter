@@ -20,19 +20,22 @@ func main() {
 	var svcApp services.Services
 	var svcApi services.Services
 
-	cfg, err := config.Load()
-	if err != nil {
-		log.Fatalf("Failed to load configuration: %v", err)
+	helpers.EnableANSI()
+
+	cfg, errCfg := config.Load()
+	if errCfg != nil {
+		log.Fatalf("Failed to load configuration: %v", errCfg)
+	} else {
+		svcApp.Name = cfg.GetAppName()
+		svcApp.Display = cfg.GetAppName()
+		svcApp.Description = fmt.Sprintf("Service Application of %s", cfg.GetAppName())
+
+		svcApi.Name = cfg.GetAppName() + "Api"
+		svcApi.Display = cfg.GetAppName() + " (API)"
+		svcApi.Description = fmt.Sprintf("Service Application of %s", cfg.GetAppName()+" (API)")
 	}
+
 	flag.Parse()
-
-	svcApp.Name = cfg.GetAppName()
-	svcApp.Display = cfg.GetAppName()
-	svcApp.Description = fmt.Sprintf("Service Application of %s", cfg.GetAppName())
-
-	svcApi.Name = cfg.GetAppName() + "Api"
-	svcApi.Display = cfg.GetAppName() + " (API)"
-	svcApi.Description = fmt.Sprintf("Service Application of %s", cfg.GetAppName()+" (API)")
 
 	if *cmdGenerateKey {
 		generator.GenerateApplicationKey()
@@ -43,24 +46,68 @@ func main() {
 	}
 
 	switch os.Args[1] {
-	case "install":
-		errInstall := cmdInstall.Parse(os.Args[2:])
-		if errInstall != nil {
+	case "service":
+		errService := cmdService.Parse(os.Args[2:])
+		if errService != nil {
 			return
 		}
-	case "stop":
-		errStop := cmdStop.Parse(os.Args[2:])
-		if errStop != nil {
-			return
-		}
-	case "uninstall":
-		errorUninstall := cmdUninstall.Parse(os.Args[2:])
-		if errorUninstall != nil {
-			return
+		if cmdService.NArg() > 0 {
+			switch os.Args[2] {
+			case "install":
+				if len(os.Args) < 3 {
+					cmdServiceInstall.Usage()
+					os.Exit(1)
+				}
+				args := os.Args[3:]
+				flagIndex := helpers.GetFlagIndex(args)
+				flagArgs := args[flagIndex:]
+				errServiceInstall := cmdServiceInstall.Parse(flagArgs)
+				if errServiceInstall != nil {
+					return
+				}
+			case "start":
+				if len(os.Args) < 3 {
+					cmdServiceStart.Usage()
+					os.Exit(1)
+				}
+				args := os.Args[3:]
+				flagIndex := helpers.GetFlagIndex(args)
+				flagArgs := args[flagIndex:]
+				errServiceStart := cmdServiceStart.Parse(flagArgs)
+				if errServiceStart != nil {
+					return
+				}
+			case "stop":
+				if len(os.Args) < 3 {
+					cmdServiceStop.Usage()
+					os.Exit(1)
+				}
+				args := os.Args[3:]
+				flagIndex := helpers.GetFlagIndex(args)
+				flagArgs := args[flagIndex:]
+				errServiceStop := cmdServiceStop.Parse(flagArgs)
+				if errServiceStop != nil {
+					return
+				}
+			case "uninstall":
+				if len(os.Args) < 3 {
+					cmdServiceUninstall.Usage()
+					os.Exit(1)
+				}
+				args := os.Args[3:]
+				flagIndex := helpers.GetFlagIndex(args)
+				flagArgs := args[flagIndex:]
+				errMigrationCreate := cmdServiceUninstall.Parse(flagArgs)
+				if errMigrationCreate != nil {
+					return
+				}
+			}
+		} else {
+			cmdService.Usage()
 		}
 	case "migration":
-		errMigragion := cmdMigration.Parse(os.Args[2:])
-		if errMigragion != nil {
+		errMigration := cmdMigration.Parse(os.Args[2:])
+		if errMigration != nil {
 			return
 		}
 		if cmdMigration.NArg() > 0 {
@@ -99,25 +146,25 @@ func main() {
 		os.Exit(1)
 	}
 
-	if cmdInstall.Parsed() {
-		if *cmdInstallSvcName != "" {
-			svcApp.Name = *cmdInstallSvcName
-			svcApp.Display = *cmdInstallSvcName
-			svcApp.Description = fmt.Sprintf("Service Application of %s", *cmdInstallSvcName)
+	if cmdServiceInstall.Parsed() {
+		if *cmdServiceInstallSvcName != "" {
+			svcApp.Name = *cmdServiceInstallSvcName
+			svcApp.Display = *cmdServiceInstallSvcName
+			svcApp.Description = fmt.Sprintf("Service Application of %s", *cmdServiceInstallSvcName)
 
-			if *cmdInstallSvcApi {
-				svcApi.Name = *cmdInstallSvcName + "Api"
-				svcApi.Display = *cmdInstallSvcName + " (API)"
-				svcApi.Description = fmt.Sprintf("Service Application of %s", *cmdInstallSvcName+" (API)")
+			if *cmdServiceInstallSvcApi {
+				svcApi.Name = *cmdServiceInstallSvcName + "Api"
+				svcApi.Display = *cmdServiceInstallSvcName + " (API)"
+				svcApi.Description = fmt.Sprintf("Service Application of %s", *cmdServiceInstallSvcName+" (API)")
 			}
 		}
-		if *cmdInstallSvcDisplay != "" {
-			svcApp.Display = *cmdInstallSvcDisplay
-			svcApi.Display = *cmdInstallSvcDisplay
+		if *cmdServiceInstallSvcDisplay != "" {
+			svcApp.Display = *cmdServiceInstallSvcDisplay
+			svcApi.Display = *cmdServiceInstallSvcDisplay
 		}
-		if *cmdInstallSvcDescription != "" {
-			svcApp.Description = *cmdInstallSvcDescription
-			svcApi.Description = *cmdInstallSvcDescription
+		if *cmdServiceInstallSvcDescription != "" {
+			svcApp.Description = *cmdServiceInstallSvcDescription
+			svcApi.Description = *cmdServiceInstallSvcDescription
 		}
 
 		var flags helpers.Flags
@@ -136,7 +183,7 @@ func main() {
 		} else {
 			log.Println("App service installed successfully")
 		}
-		if *cmdInstallSvcApi {
+		if *cmdServiceInstallSvcApi {
 			apiFlags = flags.SetFlag("svcname", svcApi.Name)
 			apiPath := filepath.Join(exePath, "api.exe")
 			apiErr := svcApi.InstallService(apiPath, apiFlags)
@@ -160,10 +207,36 @@ func main() {
 		}
 	}
 
-	if cmdStop.Parsed() {
+	if cmdServiceStart.Parsed() {
 		var svcSingle services.Services
-		if *cmdStopSvcname != "" {
-			svcSingle.Name = *cmdStopSvcname
+		if *cmdServiceStartSvcname != "" {
+			svcSingle.Name = *cmdServiceStartSvcname
+			startSingleErr := svcSingle.RunService()
+			if startSingleErr != nil {
+				log.Printf("Failed to start app service: %v", startSingleErr)
+			} else {
+				log.Println("App service started successfully")
+			}
+		} else {
+			startAppErr := svcApp.RunService()
+			if startAppErr != nil {
+				log.Printf("Failed to start app service: %v", startAppErr)
+			} else {
+				log.Printf("\033[31mApp service started successfully")
+			}
+			startApiErr := svcApi.RunService()
+			if startApiErr != nil {
+				log.Printf("Failed to start api service: %v", startApiErr)
+			} else {
+				log.Printf("Api service started successfully")
+			}
+		}
+	}
+
+	if cmdServiceStop.Parsed() {
+		var svcSingle services.Services
+		if *cmdServiceStopSvcname != "" {
+			svcSingle.Name = *cmdServiceStopSvcname
 			stopSingleErr := svcSingle.StopService()
 			if stopSingleErr != nil {
 				log.Printf("Failed to stop app service: %v", stopSingleErr)
@@ -171,23 +244,25 @@ func main() {
 				log.Println("App service stopped successfully")
 			}
 		} else {
-			svcApp.Name = *cmdStopSvcname
-			svcApi.Name = *cmdStopSvcname
-
 			stopAppErr := svcApp.StopService()
 			if stopAppErr != nil {
 				log.Printf("Failed to stop app service: %v", stopAppErr)
 			} else {
 				log.Println("App service stopped successfully")
 			}
+			stopApiErr := svcApi.StopService()
+			if stopApiErr != nil {
+				log.Printf("Failed to stop api service: %v", stopApiErr)
+			} else {
+				log.Printf("Api service stopped successfully")
+			}
 		}
-
 	}
 
-	if cmdUninstall.Parsed() {
+	if cmdServiceUninstall.Parsed() {
 		var svcSingle services.Services
-		if *cmdUninstallSvcname != "" {
-			svcSingle.Name = *cmdUninstallSvcname
+		if *cmdServiceUninstallSvcname != "" {
+			svcSingle.Name = *cmdServiceUninstallSvcname
 			stopSingleErr := svcSingle.UninstallService()
 			if stopSingleErr != nil {
 				log.Printf("Failed to stop app service: %v", stopSingleErr)
@@ -195,9 +270,9 @@ func main() {
 				log.Println("App service stopped successfully")
 			}
 		} else {
-			if *cmdUninstallSvcname != "" {
-				svcApp.Name = *cmdUninstallSvcname
-				svcApi.Name = *cmdUninstallSvcname + "Api"
+			if *cmdServiceUninstallSvcname != "" {
+				svcApp.Name = *cmdServiceUninstallSvcname
+				svcApi.Name = *cmdServiceUninstallSvcname + "Api"
 			}
 			uninstallAppErr := svcApp.UninstallService()
 			if uninstallAppErr != nil {
